@@ -86,29 +86,36 @@ header .sp{flex:1}
 .stamp span{display:inline-block;padding:8px 20px;border-radius:16px;background:var(--sc,#8c9cf0);box-shadow:0 8px 18px rgba(0,0,0,.2)}
 
 /* drop hints */
-.hint{position:absolute;z-index:8;box-shadow:0 6px 16px rgba(110,118,165,.3);opacity:.0;transition:opacity .2s,transform .2s;font-size:13px;text-align:center;border-radius:18px;padding:10px 12px;color:var(--ink2);pointer-events:none}
-#stage.drag .hint{opacity:1}
-.hint.active{color:#fff;transform:scale(1.08)}
-#hL{left:8px;top:40%;width:84px;background:var(--mint)}#hL.active{background:var(--ok)}
-#hR{right:8px;top:40%;width:84px;background:var(--lav)}#hR.active{background:var(--lav2)}
-#hU{top:22px;left:50%;translate:-50% 0;width:150px;background:var(--butter)}#hU.active{background:#e0c86a}
-#zones{position:absolute;left:8px;right:8px;bottom:6px;display:flex;gap:8px;z-index:8;pointer-events:none}
-#zones .hint{position:static;flex:1;background:var(--sky);font-size:12px;line-height:1.25}
-#zones .hint.active{background:var(--sky2)}
-.hint b{display:block;font-size:18px;font-weight:500}
+:root{--ho:.4}
+#hints{position:absolute;inset:0;pointer-events:none;z-index:8}
+.hint{position:absolute;opacity:0;transition:opacity .2s,transform .2s,background .2s;font-size:12px;line-height:1.25;text-align:center;border-radius:16px;padding:8px 8px;width:min(31%,150px);background:var(--c1);color:var(--ink);pointer-events:none}
+#stage.drag .hint{opacity:var(--ho)}
+#stage.drag .hint.active{opacity:min(1,calc(var(--ho) + .45));transform:scale(1.07);background:var(--c2);color:#fff}
+.hint b{display:block;font-size:17px;font-weight:500}
+.picker{position:absolute;z-index:9;display:none;flex-direction:column;gap:8px;pointer-events:none}
+.picker.show{display:flex;animation:up .18s}
+.pk-t{font-size:11px;color:var(--ink2);text-align:center}
+.pk{padding:13px 16px;border-radius:16px;font-size:13.5px;background:var(--bg);box-shadow:5px 5px 12px var(--lo),-4px -4px 10px var(--hi);transition:background .12s,color .12s,transform .12s}
+.pk.hov{background:#6fa8dd;color:#fff;transform:scale(1.04)}
+.hz-u,.hz-d{width:min(60%,220px)}
+.hz-ul{left:8px;top:22px}.hz-u{left:50%;top:22px;translate:-50% 0}.hz-ur{right:8px;top:22px}
+.hz-l{left:8px;top:50%;margin-top:-30px;width:84px}.hz-r{right:8px;top:50%;margin-top:-30px;width:84px}
+.hz-dl{left:8px;bottom:8px}.hz-d{left:50%;bottom:8px;translate:-50% 0}.hz-dr{right:8px;bottom:8px}
 #empty{text-align:center;color:var(--ink2);display:none;padding:20px}
 #empty .big{font-size:56px}
 #empty button{margin-top:14px;padding:10px 20px;border-radius:16px}
 
 /* bottom bar */
-#bar{display:flex;gap:10px;justify-content:center;padding:6px 12px 2px;flex-wrap:nowrap}
-.act{width:62px;height:62px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;gap:1px;line-height:1.1;text-align:center;background:var(--bg);box-shadow:5px 5px 11px var(--lo),-5px -5px 11px var(--hi)}
+#bar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:6px 12px 2px;flex-wrap:nowrap}
+.act{width:76px;height:60px;border-radius:18px;padding:0 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;gap:1px;line-height:1.1;text-align:center;background:var(--bg);box-shadow:5px 5px 11px var(--lo),-5px -5px 11px var(--hi)}
 .act:active{box-shadow:inset 3px 3px 6px var(--lo),inset -3px -3px 6px var(--hi)}
 .act i{font-style:normal;font-size:20px}
 #mini{display:flex;justify-content:center;gap:14px;padding:4px 12px max(12px,env(safe-area-inset-bottom))}
 .mbtn{width:44px;height:44px;border-radius:50%;font-size:18px;font-weight:600;color:var(--ink2);background:var(--bg);box-shadow:4px 4px 10px var(--lo),-4px -4px 10px var(--hi)}
 .mbtn.on,.mbtn:active{box-shadow:inset 2px 2px 6px var(--lo),inset -2px -2px 6px var(--hi);color:#5d6bd0}
 #bar.hide{display:none}
+#pop{position:fixed;left:50%;bottom:calc(76px + env(safe-area-inset-bottom));translate:-50% 0;z-index:25;display:none;flex-direction:column;gap:8px;padding:10px;border-radius:22px;background:var(--bg);box-shadow:0 12px 34px rgba(80,86,120,.35);min-width:220px}
+#pop.show{display:flex;animation:up .2s}
 #tip{text-align:center;font-size:11px;color:var(--ink2);padding:0 12px 4px}
 
 /* sheet */
@@ -133,7 +140,7 @@ header .sp{flex:1}
 .opt i{font-style:normal;font-size:20px}
 .opt small{display:block;color:var(--ink2);font-size:11px}
 .lbl{font-size:12px;color:var(--ink2);margin:12px 0 8px}
-textarea,select.f{width:100%;border:0;border-radius:16px;padding:12px 14px;font:inherit;font-size:14px;color:var(--ink);background:var(--bg);box-shadow:inset 3px 3px 7px var(--lo),inset -3px -3px 7px var(--hi);outline:0;resize:none}
+textarea,select.f,input.f{width:100%;border:0;border-radius:16px;padding:12px 14px;font:inherit;font-size:14px;color:var(--ink);background:var(--bg);box-shadow:inset 3px 3px 7px var(--lo),inset -3px -3px 7px var(--hi);outline:0;resize:none}
 .set-row{display:flex;align-items:center;gap:10px;margin:10px 0}.set-row span{width:96px;font-size:13px}.set-row select{flex:1}
 .hist{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(150,158,195,.25);font-size:13px}
 .hist div{flex:1;min-width:0}.hist small{color:var(--ink2);display:block}
@@ -164,7 +171,6 @@ textarea,select.f{width:100%;border:0;border-radius:16px;padding:12px 14px;font:
   <div class="sp"></div>
   <button class="ibtn" id="bFilter" aria-label="ตัวกรอง">⚲ กรอง</button>
   <button class="ibtn" id="bHist" aria-label="ประวัติ">☰ <span class="badge" id="hc">0</span></button>
-  <button class="ibtn" id="bSet" aria-label="ตั้งค่า">⚙</button>
 </header>
 
 <section id="filters" class="hide">
@@ -174,14 +180,13 @@ textarea,select.f{width:100%;border:0;border-radius:16px;padding:12px 14px;font:
 
 <main id="stage">
   <div id="count"></div>
-  <div class="hint" id="hL"><b>✓</b>รับทราบ</div>
-  <div class="hint" id="hR"><b>➜</b>ส่งธุรการ</div>
-  <div class="hint" id="hU"><b>⏱</b>อ่านทีหลัง</div>
-  <div id="zones"></div>
+  <div id="hints"></div>
+  <div id="picker" class="picker"></div>
   <div id="empty"><div class="big">🌿</div><p id="emptyMsg">จัดการหนังสือครบแล้ว</p><button class="raised" id="bReset">รีเซ็ตข้อมูลตัวอย่าง</button></div>
 </main>
 
-<div id="mini"><button class="mbtn" id="bMenu" aria-label="แสดงปุ่มลัด">⋯</button><button class="mbtn" id="bHelp" aria-label="วิธีใช้">?</button></div>
+<div id="mini"><button class="mbtn" id="bMenu" aria-label="เมนู">⋯</button></div>
+<div id="pop"><button class="opt" data-p="bar"></button><button class="opt" data-p="help"><i>?</i>วิธีใช้งาน</button><button class="opt" data-p="set"><i>⚙</i>ตั้งค่า</button></div>
 <nav id="bar" class="hide"></nav>
 
 <div id="back"><div id="sheet"></div></div>
@@ -245,19 +250,30 @@ const DOCS=[
 DOCS.forEach(d=>{d.recv=off(d.r);d.issue=off(d.i)});
 
 /* ---------- state ---------- */
-const TARGETS={
- gA:{label:'กลุ่มงานสุขภาพดิจิทัลและเทคโนโลยีสารสนเทศ',short:'สุขภาพดิจิทัลและ IT',ic:'💻'},
- gB:{label:'กลุ่มงานข้อมูลทางการแพทย์',short:'ข้อมูลทางการแพทย์',ic:'🗂'},
- all:{label:'ทุกกลุ่มงานในการดูแล',short:'ทุกกลุ่มงาน',ic:'👥'},
- circ:{label:'แจ้งเวียนทุกคนในกลุ่ม',short:'แจ้งเวียนทุกคน',ic:'📢'}};
 const ADMIN=[
- {k:'travel',ic:'✈',label:'ทำหนังสือขออนุมัติเดินทาง'},
  {k:'reply',ic:'↩',label:'ตอบกลับว่า…',text:'พิมพ์ข้อความตอบกลับ'},
  {k:'endorse',ic:'✎',label:'เกษียณหนังสือให้…',text:'ระบุเกษียณหนังสือให้ใคร / ดำเนินการอะไร'},
  {k:'other',ic:'…',label:'อื่นๆ (พิมพ์เพิ่ม)',text:'พิมพ์คำสั่งถึงธุรการ'}];
 const load=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
 const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
-let settings=load('hs',{downL:'gA',downC:'all',downR:'gB'});
+const DEFAULTS={z:{u:'later',l:'ack',r:'admin',d:'all'},replies:['อนุมัติ','ไม่อนุมัติ','รับทราบและดำเนินการ'],ho:.4,hit:'dir',
+ groups:[{id:'gA',name:'กลุ่มงานสุขภาพดิจิทัลและเทคโนโลยีสารสนเทศ',short:'สุขภาพดิจิทัลและ IT'},{id:'gB',name:'กลุ่มงานข้อมูลทางการแพทย์',short:'ข้อมูลทางการแพทย์'}]};
+const clone=o=>JSON.parse(JSON.stringify(o));
+let settings=Object.assign(clone(DEFAULTS),load('hs3',{}));settings.z=Object.assign(clone(DEFAULTS.z),settings.z);
+Object.keys(settings.z).forEach(k=>{if(['gA','gB'].includes(settings.z[k]))settings.z[k]='g:'+settings.z[k]});
+const ZONES=[['u','↑ บน'],['l','← ซ้าย'],['r','→ ขวา'],['d','↓ ล่าง']];
+const actIds=S=>['none','ack','later','r0','r1','r2','admin','travel','endorse','areply','aother','all',...S.groups.map(g=>'g:'+g.id),'circ'];
+const AC={none:['ไม่ใช้ทิศทางนี้','','',''],ack:['รับทราบ','รับทราบ','✓','ok'],later:['อ่านทีหลัง (ย้ายไปท้ายคิว)','อ่านทีหลัง','⏱','lat'],
+ admin:['ส่งธุรการ (เลือกเมนูย่อย)','ส่งธุรการ','➜','adm'],travel:['ธุรการ: ทำหนังสือขออนุมัติเดินทาง','ขออนุมัติเดินทาง','✈','adm'],
+ endorse:['ธุรการ: เกษียณหนังสือให้… (พิมพ์เพิ่ม)','เกษียณหนังสือให้…','✎','adm'],areply:['ธุรการ: ตอบกลับว่า… (พิมพ์เพิ่ม)','ธุรการตอบกลับ…','↩','adm'],aother:['ธุรการ: อื่นๆ (พิมพ์เพิ่ม)','ธุรการอื่นๆ…','…','adm']};
+function actInfo(id,S){S=S||settings;
+  if(/^r\d$/.test(id)){const t=S.replies[+id[1]]||'';return{label:`ตอบกลับ "${t}"`,short:`ตอบ "${t}"`,ic:'💬',cat:'rep'}}
+  if(id==='all')return{label:'นำเข้ากลุ่มงาน (ปล่อย = ทุกกลุ่ม · ค้างไว้ = เลือกกลุ่ม)',short:'นำเข้ากลุ่มงาน',ic:'👥',cat:'fwd'};
+  if(id==='circ')return{label:'แจ้งเวียนทุกคนในกลุ่ม',short:'แจ้งเวียนทุกคน',ic:'📢',cat:'fwd'};
+  if(id.startsWith('g:')){const g=S.groups.find(x=>x.id===id.slice(2));return g?{label:'นำเข้ากลุ่มงาน: '+g.name,short:g.short||g.name,ic:'🗂',cat:'fwd'}:{label:'',short:'',ic:'',cat:''}}
+  const a=AC[id]||AC.none;return{label:a[0],short:a[1],ic:a[2],cat:a[3]}}
+const CAT={ok:['#d8f1e7','#6fbf9b'],adm:['#e4defa','#9588e0'],rep:['#fbe3d9','#ee9a80'],fwd:['#d8e9f9','#6fa8dd'],lat:['#faf0cc','#d9c15f']};
+const ZDIR={l:'left',r:'right',u:'up',d:'down'};
 let handled=load('hh',{});            // id -> {label,t}
 let readSet=new Set(load('hr',[]));
 let starred=new Set(load('hst',[]));
@@ -332,17 +348,17 @@ function refresh(anim){
   renderZones();renderBar();
 }
 function renderZones(){
-  $('#zones').innerHTML=['downL','downC','downR'].map(z=>`<div class="hint" id="h_${z}"><b>${TARGETS[settings[z]].ic}</b>${TARGETS[settings[z]].short}</div>`).join('');
-}
+  document.documentElement.style.setProperty('--ho',settings.ho);
+  $('#hints').innerHTML=ZONES.map(([z])=>{const a=actInfo(settings.z[z]);if(!a.short)return'';const c=CAT[a.cat]||CAT.ok;
+    return `<div class="hint hz-${z}" id="h_${z}" style="--c1:${c[0]};--c2:${c[1]}"><b>${a.ic}</b>${a.short}</div>`}).join('')}
 function renderBar(){
-  const b=(k,ic,t)=>`<button class="act" data-a="${k}"><i>${ic}</i>${t}</button>`;
-  $('#bar').innerHTML=b('left','✓','รับทราบ')+b('downL',TARGETS[settings.downL].ic,TARGETS[settings.downL].short.split(' ')[0])+b('downC',TARGETS[settings.downC].ic,'ทุกกลุ่ม')+b('downR',TARGETS[settings.downR].ic,TARGETS[settings.downR].short.split(' ')[0])+b('right','➜','ส่งธุรการ');
+  $('#bar').innerHTML=['l','u','r','d'].filter(z=>actInfo(settings.z[z]).short).map(z=>{const a=actInfo(settings.z[z]);return `<button class="act" data-a="${z}"><i>${a.ic}</i>${a.short}</button>`}).join('');
 }
 $('#bar').onclick=e=>{const b=e.target.closest('[data-a]');if(!b||!topCard)return;commitZone(b.dataset.a,byId(+topCard.dataset.id),true)};
 
 /* ---------- drag / tap ---------- */
 function bindDrag(c,d){
-  let sx,sy,dx=0,dy=0,moved=false,lp=null,long=false,t0=0,zone=null,down=false;
+  let sx,sy,dx=0,dy=0,moved=false,lp=null,long=false,t0=0,zone=null,down=false,px=0,py=0,dwell=null,dpx=0,dpy=0;
   const tilt=c.querySelector('.tilt'),fl=c.querySelector('.float'),stamp=c.querySelector('.stamp');
   c.classList.add('s0');
   c.onpointerdown=e=>{down=true;sx=e.clientX;sy=e.clientY;dx=dy=0;moved=false;long=false;t0=Date.now();c.setPointerCapture(e.pointerId);c.style.transition='none';
@@ -353,27 +369,78 @@ function bindDrag(c,d){
     c.style.transform=`translate(${dx}px,${dy}px) rotate(${clamp(dx/22,-14,14)}deg)`;
     tilt.style.transform=`rotateY(${clamp(dx/9-9,-30,30)}deg) rotateX(${clamp(-dy/14+7,-25,25)}deg)`;
     fl.style.translate=`${clamp(dx*.06,-14,14)}px ${clamp(dy*.05,-10,10)}px`;
-    zone=zoneOf(dx,dy);showZone(zone,stamp)};
+    px=e.clientX;py=e.clientY;
+    if(pickerOpen){pickHover=pickAt(px,py);return}
+    const nz=hitZone(px,py,c.getBoundingClientRect(),dx,dy);
+    if(nz!==zone){zone=nz;showZone(zone,stamp);clearTimeout(dwell);dwell=null}
+    if(zone&&['all','admin'].includes(settings.z[zone])){
+      if(!dwell||Math.hypot(px-dpx,py-dpy)>12){clearTimeout(dwell);dpx=px;dpy=py;dwell=setTimeout(()=>openPicker(zone),600)}
+    }else{clearTimeout(dwell);dwell=null}};
   const end=e=>{if(!down&&!long)return;clearTimeout(lp);const wasDown=down;down=false;if(long||!wasDown)return;
     c.classList.remove('dragging');stage.classList.remove('drag');showZone(null,stamp);
     if(!moved){tap(d);return}
+    clearTimeout(dwell);
+    if(pickerOpen){const h=pickHover,dr=ZDIR[zone]||zone;closePicker();return h?runPick(h,d,dr):reset()}
     if(zone)commitZone(zone,d,false);else reset()};
-  c.onpointerup=end;c.onpointercancel=()=>{down=false;clearTimeout(lp);reset();stage.classList.remove('drag');showZone(null,stamp)};
+  c.onpointerup=end;c.onpointercancel=()=>{down=false;clearTimeout(lp);clearTimeout(dwell);closePicker();reset();stage.classList.remove('drag');showZone(null,stamp)};
   function reset(){c.style.transition='transform .4s cubic-bezier(.2,.9,.3,1.2)';c.style.transform='';tilt.style.transform='';fl.style.translate='';c.classList.remove('dragging')}
   c._reset=reset;
 }
-function zoneOf(dx,dy){
-  const T=80,ax=Math.abs(dx),W=stage.clientWidth;
-  if(dy>T&&dy>=ax*.75){const th=Math.max(40,W*.1);return dx<-th?'downL':dx>th?'downR':'downC'}
-  if(dx>T)return'right';if(dx<-T)return'left';
-  if(dy<-T&&-dy>ax)return'up';return null}
-const ZL={left:['✓ รับทราบ','#7cc9a6'],right:['➜ ส่งธุรการ','#9a8cdf'],up:['⏱ อ่านทีหลัง','#e0c86a']};
+function hitZone(px,py,cr,dx,dy){
+  if(settings.hit==='dir'){
+    if(Math.hypot(dx,dy)<85)return null;
+    const a=Math.atan2(dy,dx)*180/Math.PI,A=Math.abs(a);
+    if(A<=40)return'r';if(A>=140)return'l';return a>0?'d':'u'}
+  let best=null,bs=0;
+  for(const [z] of ZONES){const el=$('#h_'+z);if(!el)continue;const r=el.getBoundingClientRect();
+    if(settings.hit==='doc'){
+      const w=Math.min(cr.right,r.right)-Math.max(cr.left,r.left),h=Math.min(cr.bottom,r.bottom)-Math.max(cr.top,r.top);
+      if(w>0&&h>0){const f=w*h/(r.width*r.height);if(f>.5&&f>bs){best=z;bs=f}}
+    }else{
+      const m=14;if(px>=r.left-m&&px<=r.right+m&&py>=r.top-m&&py<=r.bottom+m){
+        const dd=1/(1+Math.hypot(px-(r.left+r.width/2),py-(r.top+r.height/2)));if(dd>bs){best=z;bs=dd}}}}
+  return best}
+/* hold-to-pick group picker */
+let pickerOpen=false,pickHover=null;
+function adminItems(){return[{k:'r0',ic:'💬',label:`ตอบกลับ "${settings.replies[0]}"`},{k:'r1',ic:'💬',label:`ตอบกลับ "${settings.replies[1]}"`},{k:'travel',ic:'✈',label:'ทำหนังสือขออนุมัติเดินทาง'},{k:'endorse',ic:'✎',label:'เกษียณหนังสือให้…'},{k:'areply',ic:'↩',label:'ตอบกลับว่า…'},{k:'aother',ic:'…',label:'อื่นๆ (พิมพ์เพิ่ม)'}]}
+function openPicker(z){
+  const el=$('#h_'+z),id=settings.z[z];if(!el)return;
+  let title,items;
+  if(id==='admin'){title='ส่งธุรการ — เลื่อนนิ้วไปที่รายการแล้วปล่อย';items=adminItems().map(a=>[('a:'+a.k),a.ic+' '+a.label])}
+  else{if(!settings.groups.length)return;title='เลือกเฉพาะกลุ่มงาน — เลื่อนนิ้วไปที่ชื่อแล้วปล่อย';items=settings.groups.map(g=>[g.id,'🗂 '+g.name]).concat([['*','👥 ทุกกลุ่มงาน']])}
+  const p=$('#picker');pickerOpen=true;pickHover=null;
+  p.innerHTML=`<div class="pk-t">${title}</div>`+items.map(([k,t])=>`<div class="pk" data-g="${k}">${t}</div>`).join('');
+  const sr=stage.getBoundingClientRect(),hr=el.getBoundingClientRect(),w=Math.min(280,sr.width-16);
+  p.style.width=w+'px';p.style.top=p.style.bottom='';p.style.marginTop='';
+  p.classList.add('show');
+  p.style.left=clamp(hr.left+hr.width/2-w/2-sr.left,8,sr.width-w-8)+'px';
+  if(z[0]==='d')p.style.bottom=(sr.bottom-hr.top+8)+'px';
+  else if(z[0]==='u')p.style.top=(hr.bottom-sr.top+8)+'px';
+  else{p.style.top='50%';p.style.marginTop='-'+Math.round(p.offsetHeight/2)+'px';p.style.left=clamp(z==='l'?hr.right-sr.left+8:hr.left-sr.left-w-8,8,sr.width-w-8)+'px'}
+  navigator.vibrate&&navigator.vibrate(12)}
+function closePicker(){pickerOpen=false;pickHover=null;$('#picker').classList.remove('show')}
+function pickAt(px,py){let g=null;document.querySelectorAll('#picker .pk').forEach(e=>{const r=e.getBoundingClientRect(),on=px>=r.left-6&&px<=r.right+6&&py>=r.top-4&&py<=r.bottom+4;e.classList.toggle('hov',on);if(on)g=e.dataset.g});return g}
+function runPick(g,d,dir){
+  if(g.startsWith('a:'))return runAct(g.slice(2),d,dir);
+  if(g==='*')return commit(d,'นำเข้ากลุ่มงาน: ทุกกลุ่มงาน',dir);
+  const x=settings.groups.find(a=>a.id===g);if(x)commit(d,'นำเข้ากลุ่มงาน: '+(x.short||x.name),dir)}
+function openGroupPick(d){
+  openSheet(`<h2>นำเข้ากลุ่มงาน</h2><div class="lbl">${d.title}</div><div class="grid" style="grid-template-columns:1fr">
+   <label class="opt"><input type="checkbox" id="gAll" checked> <span>👥 ทุกกลุ่มงานภายใต้สายบังคับบัญชา</span></label>
+   ${settings.groups.map(g=>`<label class="opt"><input type="checkbox" class="gc" value="${g.id}"> <span>🗂 ${g.name}</span></label>`).join('')}</div>
+   <button class="big-btn" id="gGo">ส่ง</button>`);
+  sheet.onclick=null;
+  $('#gAll').onchange=e=>{if(e.target.checked)sheet.querySelectorAll('.gc').forEach(c=>c.checked=false)};
+  sheet.querySelectorAll('.gc').forEach(c=>c.onchange=()=>{if(c.checked)$('#gAll').checked=false});
+  $('#gGo').onclick=()=>{
+    if($('#gAll').checked)return commit(d,'นำเข้ากลุ่มงาน: ทุกกลุ่มงาน','down');
+    const sel=[...sheet.querySelectorAll('.gc:checked')].map(c=>settings.groups.find(g=>g.id===c.value)).filter(Boolean);
+    if(!sel.length)return;commit(d,'นำเข้ากลุ่มงาน: '+sel.map(g=>g.short||g.name).join(', '),'down')}}
 function showZone(z,stamp){
-  ['L','R','U'].forEach(k=>$('#h'+k).classList.toggle('active',({L:'left',R:'right',U:'up'})[k]===z));
-  ['downL','downC','downR'].forEach(k=>{const e=$('#h_'+k);e&&e.classList.toggle('active',k===z)});
-  let txt='',col='';
-  if(ZL[z]){[txt,col]=ZL[z]}else if(z){txt=TARGETS[settings[z]].short;col='#76aee0'}
-  stamp.firstElementChild.textContent=txt;stamp.style.setProperty('--sc',col);stamp.style.opacity=z?1:0}
+  ZONES.forEach(([k])=>{const e=$('#h_'+k);e&&e.classList.toggle('active',k===z)});
+  const a=z?actInfo(settings.z[z]):null;
+  if(a&&a.short){const c=CAT[a.cat]||CAT.ok;stamp.firstElementChild.textContent=a.ic+' '+a.short;stamp.style.setProperty('--sc',c[1]);stamp.style.opacity=Math.min(1,settings.ho+.4)}
+  else stamp.style.opacity=0}
 
 let tapTimer=null,tapAt=0;
 function tap(d){
@@ -384,7 +451,7 @@ function tap(d){
 let lastUndo=null,toastT=null;
 function fly(c,dir,cb){
   const W=stage.clientWidth,H=stage.clientHeight;
-  const m={left:[-W*1.3,0,-25],right:[W*1.3,0,25],up:[0,-H*1.1,0],down:[0,H*1.2,0],fade:[0,0,0]}[dir]||[0,H*1.2,0];
+  const W2=W*1.2,H2=H*1.1;const m={left:[-W*1.3,0,-25],right:[W*1.3,0,25],up:[0,-H*1.1,0],down:[0,H*1.2,0],ul:[-W2,-H2,-25],ur:[W2,-H2,25],dl:[-W2,H2,-25],dr:[W2,H2,25],fade:[0,0,0]}[dir]||[0,H*1.2,0];
   c.style.transition='transform .38s cubic-bezier(.5,0,.8,.6),opacity .38s';
   const cur=c.style.transform&&c.style.transform!=='none'?'':'';
   c.style.transform=`translate(${m[0]}px,${m[1]}px) rotate(${m[2]}deg)${dir==='fade'?' scale(.85)':''}`;c.style.opacity=0;
@@ -396,12 +463,23 @@ function commit(d,label,dir,extra){
   if(topCard&&+topCard.dataset.id===d.id)fly(topCard,dir||'fade',done);else done();
 }
 function commitZone(z,d,viaBtn){
-  if(z==='left')return commit(d,'รับทราบแล้ว','left');
-  if(z==='up')return later(d,viaBtn);
-  if(z==='right'){if(topCard&&!viaBtn)topCard._reset();return openAdmin(d)}
-  
-  const t=TARGETS[settings[z]];commit(d,`ส่งต่อ: ${t.short}`,'down');
-}
+  const id=settings.z[z],dir=ZDIR[z]||z;
+  if(!id||id==='none'){topCard&&topCard._reset&&topCard._reset();return}
+  if(viaBtn&&id==='all')return openGroupPick(d);
+  runAct(id,d,dir,viaBtn)}
+function runAct(id,d,dir,viaBtn){
+  const rs=()=>{topCard&&topCard._reset&&topCard._reset()};
+  if(id==='ack')return commit(d,'รับทราบแล้ว',dir);
+  if(id==='later')return later(d);
+  if(id==='admin'){if(viaBtn){rs();return openAdmin(d)}return commit(d,'ส่งธุรการ',dir)}
+  if(id==='travel')return commit(d,'ธุรการ: ทำหนังสือขออนุมัติเดินทาง',dir);
+  if(id==='endorse'){rs();return compose(d,'เกษียณหนังสือให้','ระบุเกษียณหนังสือให้ใคร / ดำเนินการอะไร…','ธุรการ: เกษียณหนังสือให้',dir)}
+  if(id==='areply'){rs();return compose(d,'ธุรการ: ตอบกลับว่า','พิมพ์ข้อความตอบกลับ…','ธุรการ: ตอบกลับ',dir)}
+  if(id==='aother'){rs();return compose(d,'ธุรการ: อื่นๆ','พิมพ์คำสั่งถึงธุรการ…','ธุรการ',dir)}
+  if(/^r\d$/.test(id)){const t=settings.replies[+id[1]];return commit(d,`ตอบกลับ: ${t}`,dir,t)}
+  if(id==='circ')return commit(d,'แจ้งเวียนทุกคนในกลุ่ม',dir);
+  if(id==='all')return commit(d,'นำเข้ากลุ่มงาน: ทุกกลุ่มงาน',dir);
+  if(id.startsWith('g:')){const g=settings.groups.find(x=>x.id===id.slice(2));if(g)commit(d,'นำเข้ากลุ่มงาน: '+(g.short||g.name),dir)}}
 function later(d){
   closeSheet();order=order.filter(i=>i!==d.id);order.push(d.id);
   if(topCard&&+topCard.dataset.id===d.id)fly(topCard,'up',()=>{refresh();toast('ย้ายไปท้ายคิว — อ่านทีหลัง')});else{refresh();toast('ย้ายไปท้ายคิว — อ่านทีหลัง')}}
@@ -419,7 +497,6 @@ const markRead=d=>{if(d.unread){d.unread=0;readSet.add(d.id);save('hr',[...readS
 
 function openDetail(d){
   markRead(d);
-  const t=TARGETS;
   openSheet(`<span class="urg u${d.urg}">${U[d.urg]}</span> <span class="urg">${d.type==='in'?'หนังสือภายใน':'หนังสือภายนอก'}</span>
   <h2 style="margin-top:10px">${d.title}</h2>
   <div class="meta">
@@ -436,11 +513,9 @@ function openDetail(d){
     <button class="opt" data-x="admin"><i>➜</i>ส่งธุรการ</button>
     <button class="opt" data-x="fwd"><i>⇢</i>ส่งต่อไป…</button>
     <button class="opt" data-x="circ"><i>📢</i>แจ้งเวียนทุกคน</button></div>
-  <div class="lbl">ส่งต่อกลุ่มงานในการดูแล (Quick)</div>
-  <div class="grid">
-    <button class="opt" data-x="gA"><i>${t.gA.ic}</i><span>${t.gA.label}</span></button>
-    <button class="opt" data-x="gB"><i>${t.gB.ic}</i><span>${t.gB.label}</span></button>
-    <button class="opt" data-x="all"><i>${t.all.ic}</i><span>ทั้งสองกลุ่มงาน<small>ทุกกลุ่มในการดูแล</small></span></button></div>`);
+  <div class="lbl">นำเข้ากลุ่มงาน (Quick)</div>
+  <div class="grid">${settings.groups.map(g=>`<button class="opt" data-x="g:${g.id}"><i>🗂</i><span>${g.name}</span></button>`).join('')}
+    <button class="opt" data-x="all"><i>👥</i><span>นำเข้ากลุ่มงาน<small>ทุกกลุ่มภายใต้สายบังคับบัญชา</small></span></button></div>`);
   $('#rd').onclick=()=>{closeSheet();openViewer(d)};
   sheet.onclick=e=>{const b=e.target.closest('[data-x]');if(!b)return;const x=b.dataset.x;
     if(x==='ack')commit(d,'รับทราบแล้ว','left');
@@ -448,16 +523,15 @@ function openDetail(d){
     else if(x==='admin')openAdmin(d);
     else if(x==='fwd')openForward(d);
     else if(x==='circ')commit(d,'แจ้งเวียนทุกคนในกลุ่ม','down');
-    else commit(d,`ส่งต่อ: ${t[x].short}`,'down')};
+    else runAct(x,d,'down')};
 }
 function compose(d,title,ph,label,dir,pre){
   openSheet(`<h2>${title}</h2><div class="lbl">${d.title}</div><textarea id="tx" rows="4" placeholder="${ph}">${pre||''}</textarea><button class="big-btn" style="margin-top:14px" id="go">ส่ง</button>`);
   setTimeout(()=>$('#tx').focus(),50);
   $('#go').onclick=()=>{const v=$('#tx').value.trim();if(!v){$('#tx').focus();return}commit(d,`${label}: ${v.length>26?v.slice(0,26)+'…':v}`,dir,v)}}
 function openAdmin(d){
-  openSheet(`<h2>ส่งให้ธุรการดำเนินการ</h2><div class="lbl">${d.title}</div><div class="grid" style="grid-template-columns:1fr">${ADMIN.map(a=>`<button class="opt" data-k="${a.k}"><i>${a.ic}</i>${a.label}</button>`).join('')}</div>`);
-  sheet.onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;const a=ADMIN.find(x=>x.k===b.dataset.k);
-    a.text?compose(d,a.label.replace('…',''),a.text+'…','ธุรการ: '+a.label.replace('…',''),'right'):commit(d,'ธุรการ: '+a.label,'right')}}
+  openSheet(`<h2>ส่งให้ธุรการดำเนินการ</h2><div class="lbl">${d.title}</div><div class="grid" style="grid-template-columns:1fr">${adminItems().map(a=>`<button class="opt" data-k="${a.k}"><i>${a.ic}</i>${a.label}</button>`).join('')}</div>`);
+  sheet.onclick=e=>{const b=e.target.closest('[data-k]');if(!b)return;runAct(b.dataset.k,d,'right')}}
 function openForward(d){
   const list=['ผู้อำนวยการโรงพยาบาล','รองผู้อำนวยการฝ่ายการแพทย์','หัวหน้ากลุ่มงานการพยาบาล','กลุ่มงานเภสัชกรรม','หน่วยงานอื่น…'];
   openSheet(`<h2>ส่งต่อไปยัง…</h2><div class="grid" style="grid-template-columns:1fr">${list.map(x=>`<button class="opt" data-n="${x}"><i>⇢</i>${x}</button>`).join('')}</div>`);
@@ -472,27 +546,50 @@ function openMore(d){
   sheet.onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;const m=b.dataset.m;
     if(m==='later')later(d);else if(m==='star'){starred.has(d.id)?starred.delete(d.id):starred.add(d.id);save('hst',[...starred]);closeSheet();refresh(false)}
     else{closeSheet();toast('เมนูนี้ยังอยู่ระหว่างออกแบบ')}}}
-function openSettings(){
-  const opt=v=>Object.entries(TARGETS).map(([k,t])=>`<option value="${k}"${v===k?' selected':''}>${t.label}</option>`).join('');
-  openSheet(`<h2>ตั้งค่าการลากลง</h2><div class="lbl">กำหนดปลายทางเมื่อลากหนังสือลงด้านล่าง</div>
-   <div class="set-row"><span>ซ้ายล่าง ↙</span><select class="f" id="sL">${opt(settings.downL)}</select></div>
-   <div class="set-row"><span>กลางล่าง ↓</span><select class="f" id="sC">${opt(settings.downC)}</select></div>
-   <div class="set-row"><span>ขวาล่าง ↘</span><select class="f" id="sR">${opt(settings.downR)}</select></div>
-   <div class="lbl">ลากซ้าย = รับทราบ · ลากขวา = ส่งธุรการ · ลากขึ้น = อ่านทีหลัง</div>
-   <button class="big-btn" id="sv">บันทึก</button>`);
-  sheet.onclick=null;
-  $('#sv').onclick=()=>{settings={downL:$('#sL').value,downC:$('#sC').value,downR:$('#sR').value};save('hs',settings);closeSheet();refresh(false)}}
+function collect(dr){
+  sheet.querySelectorAll('[data-r]').forEach(i=>dr.replies[+i.dataset.r]=i.value.trim()||DEFAULTS.replies[+i.dataset.r]);
+  sheet.querySelectorAll('[data-z]').forEach(i=>dr.z[i.dataset.z]=i.value);
+  sheet.querySelectorAll('[data-gn]').forEach(i=>dr.groups[+i.dataset.gn].name=i.value.trim());
+  sheet.querySelectorAll('[data-gs]').forEach(i=>dr.groups[+i.dataset.gs].short=i.value.trim());
+  dr.ho=$('#sHo').value/100;dr.hit=$('#sHit').value}
+function openSettings(draft){
+  draft=draft||clone(settings);
+  const opt=v=>actIds(draft).map(k=>`<option value="${k}"${v===k?' selected':''}>${actInfo(k,draft).label}</option>`).join('');
+  openSheet(`<h2>ตั้งค่า</h2>
+   <div class="lbl">กลุ่มงานภายใต้สายบังคับบัญชา (ใช้กับ "นำเข้ากลุ่มงาน")</div>
+   ${draft.groups.map((g,i)=>`<div class="set-row"><input class="f" data-gn="${i}" value="${g.name}" placeholder="ชื่อกลุ่มงาน"><input class="f" data-gs="${i}" value="${g.short||''}" placeholder="ชื่อสั้น" style="max-width:120px"><button class="opt" data-gd="${i}" style="padding:10px 14px">✕</button></div>`).join('')}
+   <button class="opt" id="gAdd" style="width:100%;justify-content:center">＋ เพิ่มกลุ่มงาน</button>
+   <div class="lbl">การลาก 4 ทิศ — เลือกว่าแต่ละทิศทำอะไร</div>
+   ${ZONES.map(([z,n])=>`<div class="set-row"><span>${n}</span><select class="f" data-z="${z}">${opt(draft.z[z])}</select></div>`).join('')}
+   <div class="lbl">ป้ายถูกเลือกเมื่อ…</div>
+   <select class="f" id="sHit"><option value="dir"${draft.hit==='dir'?' selected':''}>ตามทิศทางที่ลาก (แนะนำ)</option><option value="finger"${draft.hit==='finger'?' selected':''}>นิ้วที่ลากไปโดนป้ายนั้น</option><option value="doc"${draft.hit==='doc'?' selected':''}>ตัวเอกสารที่ลากไปทับป้ายนั้น</option></select>
+   <div class="lbl">ข้อความตอบกลับด่วน (ใช้กับตัวเลือก ตอบกลับ "…")</div>
+   ${[0,1,2].map(i=>`<div class="set-row"><span>ข้อความ ${i+1}</span><input class="f" data-r="${i}" value="${draft.replies[i]}"></div>`).join('')}
+   <div class="lbl">ความจางของป้ายบอกทิศทางตอนลาก: <b id="hov">${Math.round(draft.ho*100)}%</b></div>
+   <input type="range" id="sHo" min="0" max="100" value="${Math.round(draft.ho*100)}" style="width:100%">
+   <div style="position:relative;height:58px"><div class="hint" id="hoS" style="position:absolute;left:50%;translate:-50% 0;opacity:${draft.ho};--c1:#d8f1e7;--c2:#6fbf9b"><b>✓</b>ตัวอย่างป้าย</div></div>
+   <button class="big-btn" id="sv" style="margin-top:6px">บันทึก</button><button class="opt" id="sdef" style="width:100%;justify-content:center">คืนค่าเริ่มต้น</button>`);
+  sheet.onclick=e=>{
+    if(e.target.closest('#gAdd')){collect(draft);draft.groups.push({id:'g'+Date.now().toString(36),name:'กลุ่มงานใหม่',short:''});openSettings(draft)}
+    const dl=e.target.closest('[data-gd]');if(dl){collect(draft);draft.groups.splice(+dl.dataset.gd,1);openSettings(draft)}};
+  $('#sHo').oninput=e=>{$('#hov').textContent=e.target.value+'%';$('#hoS').style.opacity=e.target.value/100};
+  $('#sdef').onclick=()=>{settings=clone(DEFAULTS);save('hs3',settings);closeSheet();refresh(false)};
+  $('#sv').onclick=()=>{collect(draft);draft.groups=draft.groups.filter(g=>g.name);settings=draft;save('hs3',settings);closeSheet();refresh(false)}}
 function openHist(){
   const ids=Object.keys(handled).sort((a,b)=>handled[b].t-handled[a].t);
   openSheet(`<h2>ประวัติการดำเนินการ (${ids.length})</h2>`+(ids.length?ids.map(id=>`<div class="hist"><div>${byId(+id).title.slice(0,60)}…<small>→ ${handled[id].label}</small></div><button class="raised" data-u="${id}">เลิกทำ</button></div>`).join(''):'<p style="color:var(--ink2)">ยังไม่มีรายการ</p>'));
   sheet.onclick=e=>{const b=e.target.closest('[data-u]');if(!b)return;delete handled[b.dataset.u];save('hh',handled);refresh();openHist()}}
-$('#bMenu').onclick=()=>{$('#bar').classList.toggle('hide');$('#bMenu').classList.toggle('on')};
-$('#bHelp').onclick=()=>{openSheet(`<h2>วิธีใช้งาน</h2><div class="meta" style="grid-template-columns:1fr">
-<div class="pressed">👈 <b>ลากซ้าย</b> = รับทราบ</div><div class="pressed">👉 <b>ลากขวา</b> = ส่งธุรการ (เลือกงานที่ให้ทำ)</div>
-<div class="pressed">👇 <b>ลากลง</b> = ส่งกลุ่มงาน (ซ้ายล่าง / กลางล่าง / ขวาล่าง ตั้งค่าได้ที่ ⚙)</div><div class="pressed">👆 <b>ลากขึ้น</b> = อ่านทีหลัง</div>
+function openHelp(){
+  const rows=ZONES.map(([z,n])=>{const a=actInfo(settings.z[z]);return a.short?`<div class="pressed"><b>ลาก${n}</b> = ${a.label}</div>`:''}).join('');
+  openSheet(`<h2>วิธีใช้งาน</h2><div class="meta" style="grid-template-columns:1fr">${rows}
 <div class="pressed"><b>แตะ 1 ที</b> = รายละเอียด · <b>แตะ 2 ที</b> = อ่านฉบับเต็ม</div><div class="pressed"><b>กดค้าง</b> = ตัวเลือกอื่นๆ</div>
-<div class="pressed">⋯ = แสดง/ซ่อนปุ่มลัดด้านล่าง</div></div>`);sheet.onclick=null};
-$('#bSet').onclick=openSettings;$('#bHist').onclick=openHist;
+<div class="pressed">ลากไปที่ "ส่งธุรการ" หรือ "นำเข้ากลุ่มงาน" แล้ว <b>ปล่อย</b> = ส่งเลย (ธุรการ / ทุกกลุ่มงาน) · <b>ค้างไว้</b> = มีเมนูย่อยให้เลือก แล้วเลื่อนนิ้วไปปล่อยที่รายการ</div><div class="pressed">แก้ความหมายของแต่ละทิศ / เพิ่มกลุ่มงาน / วิธีจับป้าย ได้ที่ ⋯ › ตั้งค่า</div></div>`);sheet.onclick=null}
+const pop=$('#pop');
+function popLabel(){const h=$('#bar').classList.contains('hide');pop.querySelector('[data-p=bar]').innerHTML=`<i>${h?'▦':'▭'}</i>${h?'แสดงปุ่มลัด':'ซ่อนปุ่มลัด'}`}
+$('#bMenu').onclick=e=>{popLabel();pop.classList.toggle('show');$('#bMenu').classList.toggle('on',pop.classList.contains('show'));e.stopPropagation()};
+document.addEventListener('pointerdown',e=>{if(!pop.contains(e.target)&&!$('#bMenu').contains(e.target)){pop.classList.remove('show');$('#bMenu').classList.remove('on')}});
+pop.onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;const p=b.dataset.p;pop.classList.remove('show');$('#bMenu').classList.remove('on');
+  if(p==='bar')$('#bar').classList.toggle('hide');else if(p==='help')openHelp();else openSettings()};$('#bHist').onclick=openHist;
 $('#bReset').onclick=()=>{handled={};readSet=new Set();save('hh',handled);save('hr',[]);DOCS.forEach(d=>d.unread=[1,2,3,5].includes(d.id)?1:0);F.range='all';F.urg.clear();F.type='all';F.unread=false;F.from=F.to='';refresh()};
 
 /* ---------- full viewer ---------- */
